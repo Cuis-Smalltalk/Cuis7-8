@@ -1,0 +1,1076 @@
+'From Cuis7.7 [latest update: #7779] on 23 December 2025 at 4:35:39 pm'!
+'Description Tests for, and examples of the use of, the FFI package.'!
+!provides: 'Tests-FFI' 1 7!
+!requires: 'FFI' 1 48 nil!
+SystemOrganization addCategory: #'Tests-FFI'!
+
+
+!classDefinition: #FFITestLibrary category: #'Tests-FFI'!
+ExternalLibrary subclass: #FFITestLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Tests-FFI'!
+!classDefinition: 'FFITestLibrary class' category: #'Tests-FFI'!
+FFITestLibrary class
+	instanceVariableNames: ''!
+
+!classDefinition: #FFISmallStruct1 category: #'Tests-FFI'!
+ExternalStructure subclass: #FFISmallStruct1
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Tests-FFI'!
+!classDefinition: 'FFISmallStruct1 class' category: #'Tests-FFI'!
+FFISmallStruct1 class
+	instanceVariableNames: ''!
+
+!classDefinition: #FFITestBiggerStruct category: #'Tests-FFI'!
+ExternalStructure subclass: #FFITestBiggerStruct
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Tests-FFI'!
+!classDefinition: 'FFITestBiggerStruct class' category: #'Tests-FFI'!
+FFITestBiggerStruct class
+	instanceVariableNames: ''!
+
+!classDefinition: #FFITestPoint2 category: #'Tests-FFI'!
+ExternalStructure subclass: #FFITestPoint2
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Tests-FFI'!
+!classDefinition: 'FFITestPoint2 class' category: #'Tests-FFI'!
+FFITestPoint2 class
+	instanceVariableNames: ''!
+
+!classDefinition: #FFITestPoint4 category: #'Tests-FFI'!
+ExternalStructure subclass: #FFITestPoint4
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Tests-FFI'!
+!classDefinition: 'FFITestPoint4 class' category: #'Tests-FFI'!
+FFITestPoint4 class
+	instanceVariableNames: ''!
+
+!classDefinition: #FFIMemoryTests category: #'Tests-FFI'!
+TestCase subclass: #FFIMemoryTests
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Tests-FFI'!
+!classDefinition: 'FFIMemoryTests class' category: #'Tests-FFI'!
+FFIMemoryTests class
+	instanceVariableNames: ''!
+
+!classDefinition: #FFIPluginTests category: #'Tests-FFI'!
+TestCase subclass: #FFIPluginTests
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Tests-FFI'!
+!classDefinition: 'FFIPluginTests class' category: #'Tests-FFI'!
+FFIPluginTests class
+	instanceVariableNames: ''!
+
+
+!FFITestLibrary commentStamp: 'ar 8/14/2006 23:06' prior: 0!
+ExternalLibrarty used in FFI tests!
+
+!FFITestBiggerStruct commentStamp: '<historical>' prior: 0!
+Used in FFI unit test(s)!
+
+!FFITestPoint2 commentStamp: 'ar 8/14/2006 23:06' prior: 0!
+A class used for testing structures as arguments for the FFI.!
+
+!FFITestPoint4 commentStamp: 'ar 8/14/2006 23:06' prior: 0!
+A class used for testing structures as arguments for the FFI.!
+
+!FFIPluginTests commentStamp: '<historical>' prior: 0!
+SUnitized tests for the FFI (mostly the plugin side)!
+
+!FFITestLibrary methodsFor: 'primitives' stamp: 'jmv 6/Jan/2023 10:52:11'!
+ffiPrintString: aString
+	"FFITestLibrary new ffiPrintString: 'Hello' asUtf8BytesOrByteString"
+	<cdecl: char* 'ffiPrintString' (char *)>
+	^self externalCallFailed! !
+
+!FFITestLibrary methodsFor: 'primitives' stamp: 'KenD 4/Feb/2019 15:27:30'!
+ffiTestBiggerStruct: pt1 with: pt2
+	<cdecl: FFITestBiggerStruct 'ffiTestStructBigger' (FFITestPoint4 FFITestPoint4) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary methodsFor: 'primitives' stamp: 'ar 29/Aug/2011 21:59:00'!
+ffiTestChar: c1 with: c2 with: c3 with: c4
+	"FFITestLibrary new ffiTestChar: $A with: 65 with: 65.0 with: true"
+	<cdecl: char 'ffiTestChars' (char char char char)>
+	^self externalCallFailed! !
+
+!FFITestLibrary methodsFor: 'primitives' stamp: 'ar 29/Aug/2011 22:00:00'!
+ffiTestDoubles: f1 with: f2
+	"FFITestLibrary new ffiTestDoubles: $A with: 65.0"
+	<cdecl: double 'ffiTestDoubles' (double double)>
+	^self externalCallFailed! !
+
+!FFITestLibrary methodsFor: 'primitives' stamp: 'ar 29/Aug/2011 22:00:00'!
+ffiTestFloats: f1 with: f2
+	"FFITestLibrary new ffiTestFloats: $A with: 65.0"
+	<cdecl: float 'ffiTestFloats' (float float)>
+	^self externalCallFailed! !
+
+!FFITestLibrary methodsFor: 'primitives' stamp: 'jmv 14/Nov/2023 10:36:21'!
+ffiTestInt16: c1 with: c2 with: c3 with: c4
+	"FFITestLibrary new ffiTestInt16: $A with: 65 with: 65.0 with: $A"
+	<cdecl: int16 'ffiTestShorts' (int16 int16 int16 int16)>
+	^self externalCallFailed! !
+
+!FFITestLibrary methodsFor: 'primitives' stamp: 'jmv 14/Nov/2023 10:16:11'!
+ffiTestInt32: c1 with: c2 with: c3 with: c4
+	"FFITestLibrary new ffiTestInt: $A with: 65 with: 65.0 with: $A"
+	<cdecl: int32 'ffiTestInts' (int32 int32 int32 int32)>
+	^self externalCallFailed! !
+
+!FFITestLibrary methodsFor: 'old typeNames' stamp: 'jmv 14/Nov/2023 11:33:41'!
+ffiTestInt: c1 with: c2 with: c3 with: c4
+	"FFITestLibrary new ffiTestInt: $A with: 65 with: 65.0 with: $A"
+	<cdecl: long 'ffiTestInts' (long long long long)>
+	^self externalCallFailed! !
+
+!FFITestLibrary methodsFor: 'old typeNames' stamp: 'jmv 14/Nov/2023 11:33:30'!
+ffiTestShort: c1 with: c2 with: c3 with: c4
+	"FFITestLibrary new ffiTestShort: $A with: 65 with: 65.0 with: $A"
+	<cdecl: short 'ffiTestShorts' (short short short short)>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'accessing' stamp: 'ar 28/Nov/1999 19:51:00'!
+moduleName
+	"Use the fully qualified VM name so we ensure testing loading a library"
+	^'SqueakFFIPrims'! !
+
+!FFITestLibrary class methodsFor: 'primitives' stamp: 'jmv 6/Jan/2023 10:52:16'!
+ffiPrintString: aString
+	"FFITestLibrary ffiPrintString: 'Hello' asUtf8BytesOrByteString"
+	<cdecl: char* 'ffiPrintString' (char *) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'primitives' stamp: 'KenD 7/Feb/2019 02:52:17'!
+ffiTestBiggerStruct: pt1 with: pt2
+	<cdecl: FFITestBiggerStruct 'ffiTestStructBigger' (FFITestPoint4 FFITestPoint4) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'primitives' stamp: 'ar 14/Aug/2006 19:27:00'!
+ffiTestChar: c1 with: c2 with: c3 with: c4
+	"FFITestLibrary ffiTestChar: $A with: 65 with: 65.0 with: true"
+	<cdecl: char 'ffiTestChars' (char char char char) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'primitives' stamp: 'ar 14/Aug/2006 19:27:00'!
+ffiTestDoubles: f1 with: f2
+	"FFITestLibrary ffiTestDoubles: $A with: 65.0"
+	<cdecl: double 'ffiTestDoubles' (double double) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'primitives' stamp: 'djm 6/May/2014 02:39:00'!
+ffiTestDoubles9: f1 d: f2 d: f3 d: f4 d: f5 d: f6 d: f7 d: f8 d: f9
+	"FFITestLibrary ffiTestDoubles9: 1.0 d: 2.0 d: 3.0 d: 4.0 d: 5.0 d: 6.0 d: 7.0 d: 8.0 d: 9.0"
+	<cdecl: double 'ffiTestDoubles9' (double double double double double double double double double) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'primitives' stamp: 'ar 14/Aug/2006 19:27:00'!
+ffiTestFloats: f1 with: f2
+	"FFITestLibrary ffiTestFloats: $A with: 65.0"
+	<cdecl: float 'ffiTestFloats' (float float) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'primitives' stamp: 'jmv 14/Nov/2023 10:36:01'!
+ffiTestInt16: c1 with: c2 with: c3 with: c4
+	"FFITestLibrary ffiTestInt16: $A with: 65 with: 65.0 with:1"
+	<cdecl: int16 'ffiTestShorts' (int16 int16 int16 int16) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'primitives' stamp: 'jmv 14/Nov/2023 10:15:28'!
+ffiTestInt32: c1 with: c2 with: c3 with: c4
+	"FFITestLibrary ffiTestInt32: $A with: 65 with: 65.0 with: true"
+	<cdecl: int32 'ffiTestInts' (int32 int32 int32 int32) module: 'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'primitives' stamp: 'jmv 14/Nov/2023 09:55:15'!
+ffiTestInt64: long1 with: long2
+	"FFITestLibrary ffiTestInt64: 3 with: 4"
+	<cdecl: int64 'ffiTestLongLong' (int64 int64) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'primitives' stamp: 'jmv 14/Nov/2023 09:55:24'!
+ffiTestInt64A1: byte with: long1 with: long2
+	"FFITestLibrary ffiTestInt64A1: 3 with: 4 with: 5"
+	<cdecl: int64 'ffiTestLongLonga1' (char int64 int64) module: 'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'primitives' stamp: 'jmv 14/Nov/2023 09:55:34'!
+ffiTestInt64A3: byte1 with: long1 with: byte2
+	"FFITestLibrary ffiTestInt64A3: 3 with: 4 with: 5"
+	<cdecl: int64 'ffiTestLongLonga3' (char int64 char) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'primitives' stamp: 'jmv 14/Nov/2023 10:38:01'!
+ffiTestMixedDoublesInt32AndStruct: f1 d: f2 d: f3 d: f4 d: f5 d: f6 d: f7 d: f8 d: f9 i: i1 s: s1
+	"FFITestLibrary ffiTestMixedDoublesIntAndStruct: 1.0 d: 2.0 d: 3.0 d: 4.0 d: 5.0 d: 6.0 d: 7.0 d: 8.0 d: 9.0 i: 42
+		s: (FFITestPoint4 new x: 3; y: 4; z: 5; w:6)"
+	<cdecl: double 'ffiTestMixedDoublesIntAndStruct' (double double double double double double double double double int32 FFITestPoint4) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'primitives' stamp: 'djm 6/May/2014 05:08:00'!
+ffiTestMixedFloatsAndDouble: f1 with: d1 with: f2 with: f3
+	"FFITestLibrary ffiTestMixedFloatsAndDouble: 1.2 with: 3.4 with: 5.6 with: 7.8"
+	<cdecl: double 'ffiTestMixedFloatsAndDouble' (float double float float) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'primitives' stamp: 'jmv 14/Nov/2023 10:18:26'!
+ffiTestMixedIntAndStruct: i with: pt1 with: pt2
+	"FFITestLibrary ffiTestMixedIntAndStruct: 2 with: (FFITestPoint2 new x: 3; y: 4) with: (FFITestPoint2 new x: 5; y: 6)"
+	<cdecl: int32 'ffiTestMixedIntAndStruct' (int32 FFITestPoint2 FFITestPoint2) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'primitives' stamp: 'jmv 14/Nov/2023 10:17:56'!
+ffiTestMixedIntAndStruct2: i with: pt4
+	"FFITestLibrary ffiTestMixedIntAndStruct2: 2 with: (FFITestPoint4 new x: 3; y: 4; z: 5; w:6)"
+	<cdecl: int32 'ffiTestMixedIntAndStruct2' (int32 FFITestPoint4) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'primitives' stamp: 'jmv 14/Nov/2023 10:18:14'!
+ffiTestMixedIntAndStruct3: i with: anFFISmallStruct1
+	"FFITestLibrary ffiTestMixedIntAndStruct3: 2 with: (FFISmallStruct1 new x: 3; y: 4)"
+	<cdecl: int32 'ffiTestMixedIntAndStruct3' (int32 FFISmallStruct1) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'primitives' stamp: 'ar 28/Nov/1999 19:51:00'!
+ffiTestPoint2: pt1 with: pt2
+	<cdecl: FFITestPoint2 'ffiTestStruct64' (FFITestPoint2 FFITestPoint2) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'primitives' stamp: 'ar 28/Nov/1999 19:51:00'!
+ffiTestPoint4: pt1 with: pt2
+	<cdecl: FFITestPoint4 'ffiTestStructBig' (FFITestPoint4 FFITestPoint4) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'primitives' stamp: 'ar 1/Dec/1999 16:39:00'!
+ffiTestPointers: pt1 with: pt2
+	<cdecl: FFITestPoint4* 'ffiTestPointers' (FFITestPoint4* FFITestPoint4*) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'primitives' stamp: 'djm 6/May/2014 05:30:00'!
+ffiTestSmallStructReturn
+	"FFITestLibrary ffiTestSmallStructReturn"
+	<cdecl: FFISmallStruct1 'ffiTestSmallStructReturn' (void) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'primitives' stamp: 'jmv 14/Nov/2023 10:08:26'!
+ffiTestUInt32: c1 with: c2 with: c3 with: c4
+	"FFITestLibrary ffiTestUInt32: 3103854339 with: 3103854339 with: 3103854339 with: 3103854339"
+	<cdecl: int32 'ffiTestInts' (uint32 uint32 uint32 uint32) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'old typeNames' stamp: 'jmv 14/Nov/2023 11:33:43'!
+ffiTestInt: c1 with: c2 with: c3 with: c4
+	"FFITestLibrary ffiTestInt: $A with: 65 with: 65.0 with: true"
+	<cdecl: long 'ffiTestInts' (long long long long) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'old typeNames' stamp: 'jmv 14/Nov/2023 11:32:57'!
+ffiTestLongLong: long1 with: long2
+	"FFITestLibrary ffiTestLongLong: 3 with: 4"
+	<cdecl: longlong 'ffiTestLongLong' (longlong longlong) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'old typeNames' stamp: 'jmv 14/Nov/2023 11:30:44'!
+ffiTestLongLongA1: byte with: long1 with: long2
+	"FFITestLibrary ffiTestLongLongA1: 3 with: 4 with: 5"
+	<cdecl: longlong 'ffiTestLongLonga1' (char longlong longlong) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'old typeNames' stamp: 'jmv 14/Nov/2023 11:33:50'!
+ffiTestLongLongA3: byte1 with: long1 with: byte2
+	"FFITestLibrary ffiTestLongLongA3: 3 with: 4 with: 5"
+	<cdecl: longlong 'ffiTestLongLonga3' (char longlong char) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'old typeNames' stamp: 'jmv 14/Nov/2023 11:33:20'!
+ffiTestMixedDoublesIntAndStruct: f1 d: f2 d: f3 d: f4 d: f5 d: f6 d: f7 d: f8 d: f9 i: i1 s: s1
+	"FFITestLibrary ffiTestMixedDoublesIntAndStruct: 1.0 d: 2.0 d: 3.0 d: 4.0 d: 5.0 d: 6.0 d: 7.0 d: 8.0 d: 9.0 i: 42
+		s: (FFITestPoint4 new x: 3; y: 4; z: 5; w:6)"
+	<cdecl: double 'ffiTestMixedDoublesIntAndStruct' (double double double double double double double double double long FFITestPoint4) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'old typeNames' stamp: 'jmv 14/Nov/2023 11:33:33'!
+ffiTestShort: c1 with: c2 with: c3 with: c4
+	"FFITestLibrary ffiTestShort: $A with: 65 with: 65.0 with:1"
+	<cdecl: short 'ffiTestShorts' (short short short short) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFITestLibrary class methodsFor: 'old typeNames' stamp: 'jmv 14/Nov/2023 11:34:04'!
+ffiTestUlong: c1 with: c2 with: c3 with: c4
+	"FFITestLibrary ffiTestUlong: 3103854339 with: 3103854339 with: 3103854339 with: 3103854339"
+	<cdecl: long 'ffiTestInts' (ulong ulong ulong ulong) module:'SqueakFFIPrims'>
+	^self externalCallFailed! !
+
+!FFISmallStruct1 methodsFor: 'accessing' stamp: ''!
+x
+	"This method was automatically generated. See FFISmallStruct1 class>>fields."
+	<generated>
+	^handle uint8At: 1! !
+
+!FFISmallStruct1 methodsFor: 'accessing' stamp: ''!
+x: anObject
+	"This method was automatically generated. See FFISmallStruct1 class>>fields."
+	<generated>
+	handle uint8At: 1 put: anObject! !
+
+!FFISmallStruct1 methodsFor: 'accessing' stamp: ''!
+y
+	"This method was automatically generated. See FFISmallStruct1 class>>fields."
+	<generated>
+	^handle uint8At: 2! !
+
+!FFISmallStruct1 methodsFor: 'accessing' stamp: ''!
+y: anObject
+	"This method was automatically generated. See FFISmallStruct1 class>>fields."
+	<generated>
+	handle uint8At: 2 put: anObject! !
+
+!FFISmallStruct1 class methodsFor: 'as yet unclassified' stamp: 'jmv 14/Nov/2023 10:48:25'!
+fields
+	"FFISmallStruct1 defineFields"
+	^#(
+		(x	'uint8')
+		(y	'uint8')
+	)! !
+
+!FFISmallStruct1 class methodsFor: 'class initialization' stamp: 'jmv 19/Dec/2016 15:55:57'!
+initialize
+	self compileFields! !
+
+!FFITestBiggerStruct methodsFor: 'accessing' stamp: ''!
+r
+	"This method was automatically generated. See FFITestBiggerStruct class>>fields."
+	<generated>
+	^handle int64At: 33! !
+
+!FFITestBiggerStruct methodsFor: 'accessing' stamp: ''!
+r: anObject
+	"This method was automatically generated. See FFITestBiggerStruct class>>fields."
+	<generated>
+	handle int64At: 33 put: anObject! !
+
+!FFITestBiggerStruct methodsFor: 'accessing' stamp: ''!
+s
+	"This method was automatically generated. See FFITestBiggerStruct class>>fields."
+	<generated>
+	^handle int64At: 41! !
+
+!FFITestBiggerStruct methodsFor: 'accessing' stamp: ''!
+s: anObject
+	"This method was automatically generated. See FFITestBiggerStruct class>>fields."
+	<generated>
+	handle int64At: 41 put: anObject! !
+
+!FFITestBiggerStruct methodsFor: 'accessing' stamp: ''!
+t
+	"This method was automatically generated. See FFITestBiggerStruct class>>fields."
+	<generated>
+	^handle int64At: 49! !
+
+!FFITestBiggerStruct methodsFor: 'accessing' stamp: ''!
+t: anObject
+	"This method was automatically generated. See FFITestBiggerStruct class>>fields."
+	<generated>
+	handle int64At: 49 put: anObject! !
+
+!FFITestBiggerStruct methodsFor: 'accessing' stamp: ''!
+u
+	"This method was automatically generated. See FFITestBiggerStruct class>>fields."
+	<generated>
+	^handle int64At: 57! !
+
+!FFITestBiggerStruct methodsFor: 'accessing' stamp: ''!
+u: anObject
+	"This method was automatically generated. See FFITestBiggerStruct class>>fields."
+	<generated>
+	handle int64At: 57 put: anObject! !
+
+!FFITestBiggerStruct methodsFor: 'accessing' stamp: ''!
+w
+	"This method was automatically generated. See FFITestBiggerStruct class>>fields."
+	<generated>
+	^handle int64At: 25! !
+
+!FFITestBiggerStruct methodsFor: 'accessing' stamp: ''!
+w: anObject
+	"This method was automatically generated. See FFITestBiggerStruct class>>fields."
+	<generated>
+	handle int64At: 25 put: anObject! !
+
+!FFITestBiggerStruct methodsFor: 'accessing' stamp: ''!
+x
+	"This method was automatically generated. See FFITestBiggerStruct class>>fields."
+	<generated>
+	^handle int64At: 1! !
+
+!FFITestBiggerStruct methodsFor: 'accessing' stamp: ''!
+x: anObject
+	"This method was automatically generated. See FFITestBiggerStruct class>>fields."
+	<generated>
+	handle int64At: 1 put: anObject! !
+
+!FFITestBiggerStruct methodsFor: 'accessing' stamp: ''!
+y
+	"This method was automatically generated. See FFITestBiggerStruct class>>fields."
+	<generated>
+	^handle int64At: 9! !
+
+!FFITestBiggerStruct methodsFor: 'accessing' stamp: ''!
+y: anObject
+	"This method was automatically generated. See FFITestBiggerStruct class>>fields."
+	<generated>
+	handle int64At: 9 put: anObject! !
+
+!FFITestBiggerStruct methodsFor: 'accessing' stamp: ''!
+z
+	"This method was automatically generated. See FFITestBiggerStruct class>>fields."
+	<generated>
+	^handle int64At: 17! !
+
+!FFITestBiggerStruct methodsFor: 'accessing' stamp: ''!
+z: anObject
+	"This method was automatically generated. See FFITestBiggerStruct class>>fields."
+	<generated>
+	handle int64At: 17 put: anObject! !
+
+!FFITestBiggerStruct class methodsFor: 'field definition' stamp: 'jmv 14/Nov/2023 12:13:58'!
+fields
+	"FFITestBiggerStruct defineFields"
+	^#(
+		(x	'int64')
+		(y	'int64')
+		(z	'int64')
+		(w	'int64')
+		(r  	'int64')
+		(s  	'int64')
+		(t  	'int64')
+		(u  	'int64')
+	)! !
+
+!FFITestBiggerStruct class methodsFor: 'class initialization' stamp: 'KenD 7/Feb/2019 03:04:32'!
+initialize
+"
+	self defineFields; compileFields.
+"
+	self compileFields! !
+
+!FFITestPoint2 methodsFor: 'accessing' stamp: ''!
+x
+	"This method was automatically generated. See FFITestPoint2 class>>fields."
+	<generated>
+	^handle int32At: 1! !
+
+!FFITestPoint2 methodsFor: 'accessing' stamp: ''!
+x: anObject
+	"This method was automatically generated. See FFITestPoint2 class>>fields."
+	<generated>
+	handle int32At: 1 put: anObject! !
+
+!FFITestPoint2 methodsFor: 'accessing' stamp: ''!
+y
+	"This method was automatically generated. See FFITestPoint2 class>>fields."
+	<generated>
+	^handle int32At: 5! !
+
+!FFITestPoint2 methodsFor: 'accessing' stamp: ''!
+y: anObject
+	"This method was automatically generated. See FFITestPoint2 class>>fields."
+	<generated>
+	handle int32At: 5 put: anObject! !
+
+!FFITestPoint2 class methodsFor: 'field definition' stamp: 'jmv 14/Nov/2023 10:09:36'!
+fields
+	"FFITestPoint2 defineFields"
+	^#(
+		(x	'int32')
+		(y	'int32')
+	)! !
+
+!FFITestPoint2 class methodsFor: 'class initialization' stamp: 'jmv 21/Aug/2013 17:39:00'!
+initialize
+	self compileFields! !
+
+!FFITestPoint4 methodsFor: 'accessing' stamp: ''!
+w
+	"This method was automatically generated. See FFITestPoint4 class>>fields."
+	<generated>
+	^handle int32At: 13! !
+
+!FFITestPoint4 methodsFor: 'accessing' stamp: ''!
+w: anObject
+	"This method was automatically generated. See FFITestPoint4 class>>fields."
+	<generated>
+	handle int32At: 13 put: anObject! !
+
+!FFITestPoint4 methodsFor: 'accessing' stamp: ''!
+x
+	"This method was automatically generated. See FFITestPoint4 class>>fields."
+	<generated>
+	^handle int32At: 1! !
+
+!FFITestPoint4 methodsFor: 'accessing' stamp: ''!
+x: anObject
+	"This method was automatically generated. See FFITestPoint4 class>>fields."
+	<generated>
+	handle int32At: 1 put: anObject! !
+
+!FFITestPoint4 methodsFor: 'accessing' stamp: ''!
+y
+	"This method was automatically generated. See FFITestPoint4 class>>fields."
+	<generated>
+	^handle int32At: 5! !
+
+!FFITestPoint4 methodsFor: 'accessing' stamp: ''!
+y: anObject
+	"This method was automatically generated. See FFITestPoint4 class>>fields."
+	<generated>
+	handle int32At: 5 put: anObject! !
+
+!FFITestPoint4 methodsFor: 'accessing' stamp: ''!
+z
+	"This method was automatically generated. See FFITestPoint4 class>>fields."
+	<generated>
+	^handle int32At: 9! !
+
+!FFITestPoint4 methodsFor: 'accessing' stamp: ''!
+z: anObject
+	"This method was automatically generated. See FFITestPoint4 class>>fields."
+	<generated>
+	handle int32At: 9 put: anObject! !
+
+!FFITestPoint4 class methodsFor: 'field definition' stamp: 'jmv 14/Nov/2023 10:10:10'!
+fields
+	"FFITestPoint4 defineFields"
+	^#(
+		(x	'int32')
+		(y	'int32')
+		(z	'int32')
+		(w	'int32')
+	)! !
+
+!FFITestPoint4 class methodsFor: 'class initialization' stamp: 'jmv 21/Aug/2013 17:39:00'!
+initialize
+	self compileFields! !
+
+!FFIMemoryTests methodsFor: 'memory tests' stamp: 'jfr 18/Oct/2024 12:47:23'!
+testCopyToExternalMemory
+	"Test copyToExternalMemory"
+	
+	| sampleString sampleBytes addr bytes string |
+
+	sampleString := 'This is a test'.
+	sampleBytes := (sampleString, Character null asString) asUtf8Bytes.
+	addr := sampleBytes copyToExternalMemory.
+	self assert: (addr is: #ExternalAddress).
+	self assert: (addr isNull not).
+	
+	"Don't try to read from a null address"
+	(addr isNull not) 
+		ifTrue:[
+			bytes := addr bytesAt: 1 maxLength: sampleString size stopAtNullByte: true.
+			self assert: ((sampleBytes size - 1) = (bytes size)).
+			string := addr utf8StringAt: 1 maxLength: sampleString size stopAtNull: true.
+			self assert: (sampleString = string)].! !
+
+!FFIMemoryTests methodsFor: 'memory tests' stamp: 'jfr 18/Oct/2024 13:53:03'!
+testMoveToExternalMemoryAndBack
+	"Test moveToExternalMemory"
+	
+	| sample |
+
+	"Create a sample object and show it is in Smalltalk memory"
+	sample := FFITestBiggerStruct new
+		x: -100;
+		y: -50;
+		z: -25;
+		w: 0;
+		r: 25;
+		s: 50;
+		t: 100;
+		u: 5555;
+		yourself.
+	self assert: sample isInExternalMemory not.
+	
+	"Move the data to external memory and show the values still work"
+	sample moveToExternalMemory.
+	self assert: sample isInExternalMemory.
+	self assert: (sample x = -100).
+	self assert: (sample y = -50).
+	self assert: (sample z = -25).
+	self assert: (sample w = 0).
+	self assert: (sample r = 25).
+	self assert: (sample s = 50).
+	self assert: (sample t = 100).
+	self assert: (sample u = 5555).
+	
+	"Move the data back to smallalk memory and show the values still work"
+	sample moveToSmalltalkMemory.
+	self assert: sample isInExternalMemory not.
+	self assert: (sample x = -100).
+	self assert: (sample y = -50).
+	self assert: (sample z = -25).
+	self assert: (sample w = 0).
+	self assert: (sample r = 25).
+	self assert: (sample s = 50).
+	self assert: (sample t = 100).
+	self assert: (sample u = 5555).! !
+
+!FFIPluginTests methodsFor: 'external form tests' stamp: 'db 22/Oct/2020 01:37:34'!
+testBlitToAndFromExternalForm
+	"Ensure that we can blit to/from all 4 permutatations of Form and ExternalForm."
+	| source external1 external2 destination |
+	"Avoid translucency."
+	source := (Cursor waitCursor asCursorForm asFormOfDepth: 1) asFormOfDepth: 32.
+	destination := Form extent: source extent depth: 32.
+	external1 := ExternalForm extent: source extent depth: 32.
+	external1 allocateSpace.
+	external2 := ExternalForm extent: source extent depth: 32.
+	external2 allocateSpace.
+	self shouldnt: [source bits = destination bits].
+	source displayOn: external1.
+	external1 displayOn: external2.
+	external2 displayOn: destination.
+	self should: [source bits = destination bits].! !
+
+!FFIPluginTests methodsFor: 'simple tests' stamp: 'jmv 10/Jan/2024 08:31:16'!
+testConstructedCharCall
+	"Test using generic FFI spec"
+	| result meth |
+	meth := ExternalLibraryFunction
+		name:'ffiTestChars' module: FFITestLibrary moduleName 
+		callType: 0 returnType: ExternalType char
+		argumentTypes: ((1 to: 4) collect:[:i| ExternalType char]).
+	result := meth invokeWith: $A with: 65 with: 65.0 with: true.
+	self assert: result class = Character.
+	self assert: result codePoint = 130! !
+
+!FFIPluginTests methodsFor: 'simple tests' stamp: 'ar 14/Aug/2006 19:22:00'!
+testConstructedDoubleCall
+	"Test using generic FFI spec"
+	| result meth |
+	meth := ExternalLibraryFunction
+		name:'ffiTestDoubles' module: FFITestLibrary moduleName 
+		callType: 0 returnType: ExternalType double
+		argumentTypes: ((1 to: 2) collect:[:i| ExternalType double]).
+	result := meth invokeWithArguments: (Array with: 41 with: true).
+	self assert: result = 42.0! !
+
+!FFIPluginTests methodsFor: 'simple tests' stamp: 'ar 14/Aug/2006 19:21:00'!
+testConstructedFloatCall
+	"Test using generic FFI spec"
+	| result meth |
+	meth := ExternalLibraryFunction
+		name:'ffiTestFloats' module: FFITestLibrary moduleName 
+		callType: 0 returnType: ExternalType float
+		argumentTypes: ((1 to: 2) collect:[:i| ExternalType float]).
+	result := meth invokeWith: $A with: 65.0.
+	self assert: result = 130.0! !
+
+!FFIPluginTests methodsFor: 'simple tests' stamp: 'jmv 14/Nov/2023 10:38:50'!
+testConstructedInt16Call
+	"Test using generic FFI spec"
+	| result meth |
+	meth := ExternalLibraryFunction
+		name:'ffiTestShorts' module: FFITestLibrary moduleName 
+		callType: 0 returnType: ExternalType int16
+		argumentTypes: ((1 to: 4) collect:[:i| ExternalType int16]).
+	result := meth invokeWithArguments: (Array with: $A with: 65 with: 65.0 with: true).
+	self assert: result = 130.! !
+
+!FFIPluginTests methodsFor: 'simple tests' stamp: 'jmv 14/Nov/2023 10:39:01'!
+testConstructedInt32Call
+	"Test using generic FFI spec"
+	| result meth |
+	meth := ExternalLibraryFunction
+		name:'ffiTestInts' module: FFITestLibrary moduleName
+		callType: 0 returnType: ExternalType int32
+		argumentTypes: ((1 to: 4) collect:[:i| ExternalType int32]).
+	result := meth invokeWith: $A with: 65 with: 65.0 with: true.
+	self assert: result = 130.! !
+
+!FFIPluginTests methodsFor: 'simple tests' stamp: 'ar 14/Aug/2006 19:22:00'!
+testConstructedPrintString
+	"Test using generic FFI spec"
+	| result meth |
+	meth := ExternalLibraryFunction
+		name:'ffiPrintString' module: FFITestLibrary moduleName 
+		callType: 0 returnType: ExternalType string
+		argumentTypes: ((1 to: 1) collect:[:i| ExternalType string]).
+	result := meth invokeWith:'Hello World!!'.
+	self assert: result = 'Hello World!!'.! !
+
+!FFIPluginTests methodsFor: 'simple tests' stamp: 'jmv 10/Jan/2024 08:29:05'!
+testGenericCharCall
+	"Test using generic FFI spec"
+	| result |
+	result := FFITestLibrary ffiTestChar: $A with: 65 with: 65.0 with: true.
+	self assert: result class = Character.
+	self assert: result codePoint = 130! !
+
+!FFIPluginTests methodsFor: 'simple tests' stamp: 'jmv 10/Jan/2024 08:29:16'!
+testGenericDoubleCall
+	"Test using generic FFI spec"
+	| result |
+	result := FFITestLibrary ffiTestDoubles: $A with: 65.0.
+	self assert: result = 130.0! !
+
+!FFIPluginTests methodsFor: 'simple tests' stamp: 'djm 6/May/2014 02:52:00'!
+testGenericDoubleCall2
+	"Test using generic FFI spec"
+	| result |
+	result := FFITestLibrary ffiTestDoubles9: 1.0 d: 2.0 d: 3.0 d: 4.0 d: 5.0 d: 6.0 d: 7.0 d: 8.0 d: 9.0.
+	self assert: result = 45.0! !
+
+!FFIPluginTests methodsFor: 'simple tests' stamp: 'jmv 10/Jan/2024 08:29:20'!
+testGenericFloatCall
+	"Test using generic FFI spec"
+	| result |
+	result := FFITestLibrary ffiTestFloats: $A with: 65.0.
+	self assert: result = 130.0! !
+
+!FFIPluginTests methodsFor: 'simple tests' stamp: 'jmv 10/Jan/2024 08:29:26'!
+testGenericInt16Call
+	"Test using generic FFI spec"
+	| result |
+	result := FFITestLibrary ffiTestInt16: $A with: 65 with: 65.0 with: true.
+	self assert: result = 130.! !
+
+!FFIPluginTests methodsFor: 'simple tests' stamp: 'jmv 10/Jan/2024 08:29:30'!
+testGenericInt32Call
+	"Test using generic FFI spec"
+	| result |
+	result := FFITestLibrary ffiTestInt32: $A with: 65 with: 65.0 with: true.
+	self assert: result = 130.! !
+
+!FFIPluginTests methodsFor: 'simple tests' stamp: 'jmv 14/Nov/2023 10:38:10'!
+testGenericMixedDoublesInt32AndStruct
+	"Test using generic FFI spec"
+	| result int struct |
+	int := 42.
+	struct := FFITestPoint4 new.
+	struct x: 1. struct y: 2. struct z: 3. struct w: 4.
+	result := FFITestLibrary ffiTestMixedDoublesInt32AndStruct: 1.0 d: 2.0 d: 3.0 d: 4.0 d: 5.0 d: 6.0 d: 7.0 d: 8.0 d: 9.0 i: int s: struct.
+	self assert: result = (45.0 + 42 + 10)! !
+
+!FFIPluginTests methodsFor: 'simple tests' stamp: 'jmv 17/Dec/2018 12:44:56'!
+testGenericMixedFloatsAndDouble
+	"Test using generic FFI spec"
+	| result |
+	result := FFITestLibrary ffiTestMixedFloatsAndDouble: 1.2 with: 3.4 with: 5.6 with: 7.8.
+	self assert: (1.2 + 3.4 + 5.6 + 7.8 - result) abs < 1.0e-6! !
+
+!FFIPluginTests methodsFor: 'simple tests' stamp: 'jmv 6/Jan/2023 10:24:01'!
+testGenericPrintString
+	"Test using generic FFI spec"
+	| result |
+	result := FFITestLibrary ffiPrintString:'Hello World!!' asUtf8BytesOrByteString.
+	self assert: result = 'Hello World!!'.! !
+
+!FFIPluginTests methodsFor: 'simple tests' stamp: 'jmv 14/Nov/2023 09:54:51'!
+testInt64A1
+	"Test passing a char and two int64s."
+	| byte long1 long2 long3 |
+	byte := 42.
+	long1 := 16r123456789012.
+	long2 := (-1 << 31).
+	long3 := FFITestLibrary ffiTestInt64A1: byte with: long1 with: long2.
+	self assert: long3 = (byte + long1 + long2)! !
+
+!FFIPluginTests methodsFor: 'simple tests' stamp: 'jmv 14/Nov/2023 09:54:55'!
+testInt64A3
+	"Test passing a char, a int64, and another char."
+	| byte1 long1 byte2 long2 |
+	byte1 := 3.
+	long1 := 16r123456789012.
+	byte2 := 4.
+	long2 := FFITestLibrary ffiTestInt64A3: byte1 with: long1 with: byte2.
+	self assert: long2 = (byte1 + long1 + byte2)! !
+
+!FFIPluginTests methodsFor: 'simple tests' stamp: 'jmv 10/Jan/2024 08:29:45'!
+testLibraryCharCall
+	"Test using call from ExternalLibrary"
+	| result |
+	result := FFITestLibrary new ffiTestChar: $A with: 65 with: 65.0 with: true.
+	self assert: result class = Character.
+	self assert: result codePoint = 130! !
+
+!FFIPluginTests methodsFor: 'simple tests' stamp: 'jmv 10/Jan/2024 08:29:49'!
+testLibraryDoubleCall
+	"Test using call from ExternalLibrary"
+	| result |
+	result := FFITestLibrary new ffiTestDoubles: $A with: 65.0.
+	self assert: result = 130.0! !
+
+!FFIPluginTests methodsFor: 'simple tests' stamp: 'jmv 10/Jan/2024 08:30:01'!
+testLibraryFloatCall
+	"Test using call from ExternalLibrary"
+	| result |
+	result := FFITestLibrary new ffiTestFloats: $A with: 65.0.
+	self assert: result = 130.0! !
+
+!FFIPluginTests methodsFor: 'simple tests' stamp: 'jmv 10/Jan/2024 08:30:10'!
+testLibraryInt32Call
+	"Test using call from ExternalLibrary"
+	| result |
+	result := FFITestLibrary new ffiTestInt32: $A with: 65 with: 65.0 with: true.
+	self assert: result = 130.! !
+
+!FFIPluginTests methodsFor: 'simple tests' stamp: 'jmv 6/Jan/2023 10:24:06'!
+testLibraryPrintString
+	"Test using call from ExternalLibrary"
+	| result |
+	result := FFITestLibrary new ffiPrintString:'Hello World!!' asUtf8BytesOrByteString.
+	self assert: result = 'Hello World!!'.! !
+
+!FFIPluginTests methodsFor: 'simple tests' stamp: 'jmv 14/Nov/2023 10:05:18'!
+testUint32Range
+	"Simple test for making sure the FFI can call certain numbers in the uint32 range"
+	| result |
+	self shouldnt:[result := FFITestLibrary ffiTestUInt32: 3103854339 with: 3103854339 with: 3103854339 with: 3103854339] raise: Error.
+	self should: result =  1912741382.! !
+
+!FFIPluginTests methodsFor: 'other tests' stamp: 'jmv 6/Jan/2023 10:59:00'!
+testLoadSymbolFromModule
+	| address |
+	
+	"Ok"
+	address := ExternalAddress loadSymbol: 'ffiTestFloats' asUtf8BytesOrByteString module: FFITestLibrary moduleName asUtf8BytesOrByteString.
+	self deny: address isNil.
+	self deny: address isNull.
+	"Symbol does not exists"
+	self 
+		should: [ ExternalAddress loadSymbol: 'ffi_does_not_exist' asUtf8BytesOrByteString module: FFITestLibrary moduleName asUtf8BytesOrByteString ]
+		raise: Error.
+	"Module does not exists"
+	self 
+		should: [ ExternalAddress loadSymbol: 'ffiTestFloats' asUtf8BytesOrByteString module: 'NonExistingModule' asUtf8BytesOrByteString ]
+		raise: Error.		! !
+
+!FFIPluginTests methodsFor: 'structure tests' stamp: 'KenD 4/Feb/2019 15:36:17'!
+testBiggerStruct
+	"Test passing and returning up of structures > 64 bit"
+	| pt1 pt2 pt3 |
+	pt1 := FFITestPoint4 new.
+	pt1 x: 1. pt1 y: 2. pt1 z: 3. pt1 w: 4.
+	pt2 := FFITestPoint4 new.
+	pt2 x: 5. pt2 y: 6. pt2 z: 7. pt2 w: 8.
+	pt3 := FFITestLibrary ffiTestBiggerStruct: pt1 with: pt2.
+	self assert: pt3 x = 1.
+	self assert: pt3 y = 2.
+	self assert: pt3 z = 3.
+	self assert: pt3 w = 4.
+	self assert: pt3 r = 5.
+	self assert: pt3 s = 6.
+	self assert: pt3 t = 7.
+	self assert: pt3 u = 8.! !
+
+!FFIPluginTests methodsFor: 'structure tests' stamp: 'jmv 14/Nov/2023 09:54:59'!
+testInt64s
+	"Test passing and returning int64s"
+	| long1 long2 long3 |
+	long1 := 16r123456789012.
+	long2 := (-1 << 31).
+	long3 := FFITestLibrary ffiTestInt64: long1 with: long2.
+	self assert: long3 = (long1 + long2)! !
+
+!FFIPluginTests methodsFor: 'structure tests' stamp: 'djm 6/May/2014 14:55:00'!
+testMixedIntAndStruct
+	"Test passing an integer and two structures."
+	| i1 pt1 pt2 result |
+	i1 := 42.
+	pt1 := FFITestPoint2 new.
+	pt1 x: 3. pt1 y: 4.
+	pt2 := FFITestPoint2 new.
+	pt2 x: 5. pt2 y: 6.
+	result := FFITestLibrary ffiTestMixedIntAndStruct: i1 with: pt1 with: pt2.
+	self assert: result = 60.! !
+
+!FFIPluginTests methodsFor: 'structure tests' stamp: 'djm 6/May/2014 15:45:00'!
+testMixedIntAndStruct2
+	"Test passing an integer and two structures."
+	| i1 pt1 result |
+	i1 := 42.
+	pt1 := FFITestPoint4 new.
+	pt1 x: 3. pt1 y: 4. pt1 z: 5. pt1 w: 6.
+	result := FFITestLibrary ffiTestMixedIntAndStruct2: i1 with: pt1.
+	self assert: result = 60.! !
+
+!FFIPluginTests methodsFor: 'structure tests' stamp: 'djm 6/May/2014 16:02:00'!
+testMixedIntAndStruct3
+	"Test passing an integer and a small structure."
+	| i1 pt1 result |
+	i1 := 42.
+	pt1 := FFISmallStruct1 new.
+	pt1 x: 3. pt1 y: 4.
+	result := FFITestLibrary ffiTestMixedIntAndStruct3: i1 with: pt1.
+	self assert: result = 49! !
+
+!FFIPluginTests methodsFor: 'structure tests' stamp: 'ar 14/Aug/2006 19:24:00'!
+testPoint2
+	"Test passing and returning up of structures >32bit and <= 64 bit"
+	| pt1 pt2 pt3 |
+	pt1 := FFITestPoint2 new.
+	pt1 x: 1. pt1 y: 2.
+	pt2 := FFITestPoint2 new.
+	pt2 x: 3. pt2 y: 4.
+	pt3 := FFITestLibrary ffiTestPoint2: pt1 with: pt2.
+	self assert: pt3 x = 4.
+	self assert: pt3 y = 6.! !
+
+!FFIPluginTests methodsFor: 'structure tests' stamp: 'ar 14/Aug/2006 19:25:00'!
+testPoint4
+	"Test passing and returning up of structures > 64 bit"
+	| pt1 pt2 pt3 |
+	pt1 := FFITestPoint4 new.
+	pt1 x: 1. pt1 y: 2. pt1 z: 3. pt1 w: 4.
+	pt2 := FFITestPoint4 new.
+	pt2 x: 5. pt2 y: 6. pt2 z: 7. pt2 w: 8.
+	pt3 := FFITestLibrary ffiTestPoint4: pt1 with: pt2.
+	self assert: pt3 x = 6.
+	self assert: pt3 y = 8.
+	self assert: pt3 z = 10.
+	self assert: pt3 w = 12.! !
+
+!FFIPluginTests methodsFor: 'structure tests' stamp: 'ar 14/Aug/2006 19:25:00'!
+testPointers
+	"Test passing and returning of pointers to structs"
+	| pt1 pt2 pt3 |
+	pt1 := FFITestPoint4 new.
+	pt1 x: 1. pt1 y: 2. pt1 z: 3. pt1 w: 4.
+	pt2 := FFITestPoint4 new.
+	pt2 x: 5. pt2 y: 6. pt2 z: 7. pt2 w: 8.
+	pt3 := FFITestLibrary ffiTestPointers: pt1 with: pt2.
+	self assert: pt3 x = 6.
+	self assert: pt3 y = 8.
+	self assert: pt3 z = 10.
+	self assert: pt3 w = 12.! !
+
+!FFIPluginTests methodsFor: 'structure tests' stamp: 'djm 6/May/2014 05:26:00'!
+testSmallStructureReturn
+	"Test returning small structures (<4 bytes) which are returned in a register on some platforms."
+	| pt1 |
+
+	pt1 := FFITestLibrary ffiTestSmallStructReturn.
+	self assert: pt1 x = 3.
+	self assert: pt1 y = 4.! !
+
+!FFIPluginTests methodsFor: 'old typeNames tests' stamp: 'jmv 10/Jan/2024 08:29:34'!
+testGenericIntCall
+	"Test using generic FFI spec"
+	| result |
+	result := FFITestLibrary ffiTestInt: $A with: 65 with: 65.0 with: true.
+	self assert: result = 130.! !
+
+!FFIPluginTests methodsFor: 'old typeNames tests' stamp: 'jmv 20/Feb/2019 00:15:10'!
+testGenericMixedDoublesIntAndStruct
+	"Test using generic FFI spec"
+	| result int struct |
+	int := 42.
+	struct := FFITestPoint4 new.
+	struct x: 1. struct y: 2. struct z: 3. struct w: 4.
+	result := FFITestLibrary ffiTestMixedDoublesIntAndStruct: 1.0 d: 2.0 d: 3.0 d: 4.0 d: 5.0 d: 6.0 d: 7.0 d: 8.0 d: 9.0 i: int s: struct.
+	self assert: result = (45.0 + 42 + 10)! !
+
+!FFIPluginTests methodsFor: 'old typeNames tests' stamp: 'jmv 10/Jan/2024 08:29:38'!
+testGenericShortCall
+	"Test using generic FFI spec"
+	| result |
+	result := FFITestLibrary ffiTestShort: $A with: 65 with: 65.0 with: true.
+	self assert: result = 130.! !
+
+!FFIPluginTests methodsFor: 'old typeNames tests' stamp: 'jmv 10/Jan/2024 08:30:13'!
+testLibraryIntCall
+	"Test using call from ExternalLibrary"
+	| result |
+	result := FFITestLibrary new ffiTestInt: $A with: 65 with: 65.0 with: true.
+	self assert: result = 130.! !
+
+!FFIPluginTests methodsFor: 'old typeNames tests' stamp: 'djm 6/May/2014 01:54:00'!
+testLongLongA1
+	"Test passing a char and two longlongs."
+	| byte long1 long2 long3 |
+	byte := 42.
+	long1 := 16r123456789012.
+	long2 := (-1 << 31).
+	long3 := FFITestLibrary ffiTestLongLongA1: byte with: long1 with: long2.
+	self assert: long3 = (byte + long1 + long2)! !
+
+!FFIPluginTests methodsFor: 'old typeNames tests' stamp: 'djm 6/May/2014 02:50:00'!
+testLongLongA3
+	"Test passing a char, a longlong, and another char."
+	| byte1 long1 byte2 long2 |
+	byte1 := 3.
+	long1 := 16r123456789012.
+	byte2 := 4.
+	long2 := FFITestLibrary ffiTestLongLongA3: byte1 with: long1 with: byte2.
+	self assert: long2 = (byte1 + long1 + byte2)! !
+
+!FFIPluginTests methodsFor: 'old typeNames tests' stamp: 'ar 14/Aug/2006 19:23:00'!
+testLongLongs
+	"Test passing and returning longlongs"
+	| long1 long2 long3 |
+	long1 := 16r123456789012.
+	long2 := (-1 << 31).
+	long3 := FFITestLibrary ffiTestLongLong: long1 with: long2.
+	self assert: long3 = (long1 + long2)! !
+
+!FFIPluginTests methodsFor: 'old typeNames tests' stamp: 'ar 28/Jul/2009 20:53:00'!
+testUlongRange
+	"Simple test for making sure the FFI can call certain numbers in the ulong range"
+	| result |
+	self shouldnt:[result := FFITestLibrary ffiTestUlong: 3103854339 with: 3103854339 with: 3103854339 with: 3103854339] raise: Error.
+	self should: result =  1912741382.! !
+
+!FFIPluginTests methodsFor: 'callback tests' stamp: 'eem 2/Jun/2024 18:24:42'!
+testLibcQsort
+	"Use libc's qsort to sort some floats"
+
+	| sizeofDouble size_t_Type rand nElements values dataSize qsort callback callbackCount orig sort usecs |
+	sizeofDouble := ExternalType double byteSize.
+	size_t_Type := Smalltalk wordSize = 8 ifTrue: [ExternalType uint64] ifFalse: [ExternalType uint32].
+	qsort := ExternalLibraryFunction
+				name:'qsort' module: Alien libcName
+				callType: 0 returnType: ExternalType void
+				argumentTypes: {ExternalType void asPointerType. size_t_Type. size_t_Type. ExternalType void asPointerType}.
+	callbackCount := 0.
+	callback := Callback
+					signature:  #(int (*)(const void *, const void *))
+					block: [ :arg1 :arg2 |
+							callbackCount := callbackCount + 1.
+							((arg1 doubleAt: 1) - (arg2 doubleAt: 1)) sign].
+
+	rand := Random new.
+	values := ExternalAddress gcallocate: (dataSize := (nElements := 100) * sizeofDouble).
+	1 to: dataSize by: sizeofDouble do:
+		[:i| values doubleAt: i put: rand next].
+	orig := (1 to: dataSize by: sizeofDouble) collect: [:i| values doubleAt: i].
+	self assert: ((1 to: nElements - 1) anySatisfy: [:i| (orig at: i) > (orig at: i + 1)]).
+	usecs := Time microsecondsToRun: [qsort	
+											invokeWith: values
+											with: nElements
+											with: sizeofDouble
+											with: callback thunk].
+	sort := (1 to: dataSize by: sizeofDouble) collect: [:i| values doubleAt: i].
+	self deny: orig = sort.
+	1 to: nElements - 1 do:
+		[:i| self assert: (sort at: i) <= (sort at: i + 1)].
+	values free.
+	^{ orig. sort. usecs. callbackCount }! !
+FFISmallStruct1 initialize!
+FFITestBiggerStruct initialize!
+FFITestPoint2 initialize!
+FFITestPoint4 initialize!
